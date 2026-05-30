@@ -1,5 +1,5 @@
 """Main"""
-#TO DO: correggiere e finire la ricerca della password
+
 
 """Imports"""
 import os
@@ -8,7 +8,7 @@ import random
 """System variables"""
 file_name = "Passwords.json" #if you want to use this code just change the line with the file name you prefer
 passwords = {}
-characters = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "w", "x", "y", "z", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+characters = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "w", "x", "y", "z","A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 """Functions"""
 #FOR SEPARTE CONTENTS
 def separator():
@@ -33,7 +33,7 @@ def welcome():
     separator()
 #FOR ADD A PASSWORD (to a dictionary)
 def add_password(dictionary=None):
-    service = input("Type the name of the service (ES: Discord, Roblox, GitHub): ")
+    service = input("Type the name of the service (EX: Discord, Roblox, GitHub): ")
     username = input("Type the username: ")
     password = input("Type the password: ")
     try:
@@ -51,7 +51,6 @@ def add_password(dictionary=None):
 def write_passwords(dictionary=None, path=str):
     if type(dictionary) != dict:
         print("ERROR: parameter not a dict!")
-        return
     else:
         if os.path.exists(path) and os.path.getsize(path) > 0:
             with open(path, "r") as file:
@@ -86,7 +85,7 @@ def load_passwords(path=str, dictionary=None):
             except:
                 print("ERROR!")
     else:
-        print("ERROR: file doesn't exist!. Creating it now!")
+        print("ERROR: file doesn't exist!. Creating it now...")
         try:
             with open(path, "w") as file:
                 pass
@@ -112,11 +111,11 @@ def searchPassword(path=str, dictionary=None):
             else:
                 print("ERROR: not found!")
         except Exception as Error:
-            print(f"ERROR whie searching password ({Error})")
+            print(f"ERROR while searching password ({Error})")
     elif action == "2":
         username = input("Type the username: ")
         if not os.path.exists(path):
-            print("ERROR: file not found! Creating it right now")
+            print("ERROR: file not found! Creating it right now...")
             try:
                 with open(path, "w") as file:
                     pass
@@ -135,8 +134,9 @@ def searchPassword(path=str, dictionary=None):
                         print(f"  |- Username: {value['username']}")
                         print(f"  |- Password: {value['password']}")
                         separator()
-                    else:
-                        print("Not found!")
+                        found = True
+                if not found:
+                    print("Not found!")
                     
             
 #FOR DELETE A PASSWORD
@@ -144,8 +144,11 @@ def deletePassword(dictionary=None, path=str):
     load_passwords(path, dictionary)
     service_ToDelete = input("Type the name of the service that the password you want to delete is associated with: ")
     password_ToDelete = input("Type the password that you want to delete (which is associated with the service typed before): ")
-    with open(path, "r") as file:
-        passwords_found = json.load(file)
+    try:
+        with open(path, "r") as file:
+            passwords_found = json.load(file)
+    except Exception as Error:
+        print(f"ERROR: {Error}")
     to_delete = []
     for key, value in passwords_found.items():
         if key == service_ToDelete and value["password"] == password_ToDelete:
