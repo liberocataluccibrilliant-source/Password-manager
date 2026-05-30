@@ -1,6 +1,5 @@
 """Main"""
 #TO DO: correggiere e finire la ricerca della password
-#TO DO: fare l'eliminazione della password
 
 """Imports"""
 import os
@@ -21,6 +20,17 @@ def separator():
     
     print(character * length)
 
+#FOR WELCOME AT THE START OF THE PROGRAMM
+def welcome():
+    separator()
+    print(r"""
+    ____                                          __   __  ___                                 
+   / __ \____ ____________      ______  _________/ /  /  |/  /___ _____  ____ _____ ____  _____
+  / /_/ / __ `/ ___/ ___/ | /| / / __ \/ ___/ __  /  / /|_/ / __ `/ __ \/ __ `/ __ `/ _ \/ ___/
+ / ____/ /_/ (__  |__  )| |/ |/ / /_/ / /  / /_/ /  / /  / / /_/ / / / / /_/ / /_/ /  __/ /    
+/_/    \__,_/____/____/ |__/|__/\____/_/   \__,_/  /_/  /_/\__,_/_/ /_/\__,_/\__, /\___/_/     
+                                                                            /____/             """)
+    separator()
 #FOR ADD A PASSWORD (to a dictionary)
 def add_password(dictionary=None):
     service = input("Type the name of the service (ES: Discord, Roblox, GitHub): ")
@@ -104,8 +114,29 @@ def searchPassword(path=str, dictionary=None):
         except Exception as Error:
             print(f"ERROR whie searching password ({Error})")
     elif action == "2":
-        pass
-        print("Not working yet!")
+        username = input("Type the username: ")
+        if not os.path.exists(path):
+            print("ERROR: file not found! Creating it right now")
+            try:
+                with open(path, "w") as file:
+                    pass
+                print("File created!")
+            except Exception as Error:
+                print(f"ERROR: {Error}")
+        else:
+            if os.path.getsize(path) == 0:
+                print("ERROR: file empty!")
+            else:
+                with open(path, "r") as file:
+                    passwords_found = json.load(file)
+                for key, value in passwords_found.items():
+                    if username in passwords_found:
+                        print(f"Service: {key}")
+                        print(f"  |- Username: {value['username']}")
+                        print(f"  |- Password: {value['password']}")
+                        separator()
+                    
+            
 #FOR DELETE A PASSWORD
 def deletePassword(dictionary=None, path=str):
     load_passwords(path, dictionary)
@@ -147,6 +178,7 @@ def show_menu():
     print("[4] for delete a password")
     print("[5] for generate a random password")
 """Script"""
+welcome()
 while True:
     show_menu()
     action = input("Type a number: ")
