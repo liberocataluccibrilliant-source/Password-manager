@@ -130,11 +130,13 @@ def searchPassword(path=str, dictionary=None):
                 with open(path, "r") as file:
                     passwords_found = json.load(file)
                 for key, value in passwords_found.items():
-                    if username in passwords_found:
+                    if username == value["username"]:
                         print(f"Service: {key}")
                         print(f"  |- Username: {value['username']}")
                         print(f"  |- Password: {value['password']}")
                         separator()
+                    else:
+                        print("Not found!")
                     
             
 #FOR DELETE A PASSWORD
