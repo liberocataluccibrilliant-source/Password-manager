@@ -5,6 +5,9 @@
 import os
 import json
 import random
+import time
+import itertools
+import string
 """System variables"""
 file_name = "Passwords.json" #if you want to use this code just change the line with the file name you prefer
 passwords = {}
@@ -174,7 +177,22 @@ def generatePassword():
             print(f"Random password: {result}") 
     except ValueError:
         print("ERROR: invalid number!")
-    
+
+#FOR TEST A PASSWORD
+def test_password():
+    password = input("Type the password to test: ")
+    alphabet = string.ascii_letters + string.digits + string.punctuation
+    start = time.time()
+    for length in range(1, len(password) + 1):
+        for attempt in itertools.product(alphabet, repeat=length):
+            attempt = ''.join(attempt)
+            if attempt == password:
+                end = time.time()
+                print(f"\nPassword found: {attempt}")
+                print(f"Time taken: {end - start:.4f} seconds")
+
+    print("Password not guessed!")
+
 #FOR SHOW THE MENU
 def show_menu():
     print("[1] for add a password")
@@ -182,6 +200,8 @@ def show_menu():
     print("[3] for search a password")
     print("[4] for delete a password")
     print("[5] for generate a random password")
+    print("[6] for test the password strength")
+    print("[7] for exit")
 """Script"""
 welcome()
 while True:
@@ -199,5 +219,10 @@ while True:
         deletePassword(passwords, file_name)
     elif action == "5":
         generatePassword()
+    elif action == "6":
+        test_password()
+    elif action == "7":
+        print("Closing the programm...")
+        break
     else:
         print("Invalid number!")
