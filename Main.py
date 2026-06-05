@@ -156,25 +156,38 @@ def deletePassword(dictionary=None, path=str):
     for key, value in passwords_found.items():
         if key == service_ToDelete and value["password"] == password_ToDelete:
             to_delete.append(service_ToDelete)
-    for _ in to_delete:
-        del passwords_found[_]
-        print("Password deleted!")
-    dictionary = passwords_found
-    print(dictionary)
-    with open(path, "w") as file:
-        json.dump(passwords_found, file, indent=1)
+    request = input("Do you want to delete this passwords? [Y/n]").lower()
+    if request == "y":
+        for _ in to_delete:
+            del passwords_found[_]
+            print("Password deleted!")
+        dictionary = passwords_found
+        print(dictionary)
+        with open(path, "w") as file:
+         json.dump(passwords_found, file, indent=1)
+    else:
+        print("Operation aborted!")
 
 
 #FOR GENERATE A PASSWORD
 def generatePassword():
     try:
+        allowed = True
         length = int(input("How long should the password be?: "))
         result = ""
-        for i in range(length):
-            character = random.choice(characters)
-            result = result + character
-        else:
-            print(f"Random password: {result}") 
+        if length > 20:
+            request = input("Length bigger than 20. Are you sure you want to continue? [Y/n]: ").lower()
+            if request == "y":
+                allowed = True
+            else:
+                print("Operation aborted!")
+                allowed = False
+        if allowed:
+            for i in range(length):
+                character = random.choice(characters)
+                result = result + character
+            else:
+                print(f"Random password: {result}")
     except ValueError:
         print("ERROR: invalid number!")
 
@@ -190,8 +203,8 @@ def test_password():
                 end = time.time()
                 print(f"\nPassword found: {attempt}")
                 print(f"Time taken: {end - start:.4f} seconds")
-
-    print("Password not guessed!")
+            else:
+                print("Password not guessed!")
 
 #FOR SHOW THE MENU
 def show_menu():
@@ -202,15 +215,24 @@ def show_menu():
     print("[5] for generate a random password")
     print("[6] for test the password strength")
     print("[7] for exit")
+
+#FOR CLEAN THE TERMINAL
+def clean():
+    if os.name == "posix":
+        os.system("clear")
+    elif os.name == "nt":
+        os.system("cls")
+    else:
+        separator()
 """Script"""
 welcome()
 while True:
+    separator()
     show_menu()
     action = input("Type a number: ")
     if action == "1":
         add_password(passwords)
         write_passwords(passwords, file_name)
-        print("Password written!")
     elif action == "2":
         load_passwords(file_name, passwords)
     elif action == "3":
@@ -226,3 +248,4 @@ while True:
         break
     else:
         print("Invalid number!")
+        clean()
