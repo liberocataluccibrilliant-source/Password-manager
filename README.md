@@ -75,10 +75,6 @@ Choose an option by typing the corresponding number.
 * [ ] Add password strength validation.
 * [ ] Add master password protection.
 
-## Warning
-
-This project is intended for educational purposes and learning Python programming. Since passwords are currently stored without encryption, it should not be used to store sensitive or real credentials.
-
 ## Author
 
 Created as a personal Python project to practice:
